@@ -41,9 +41,9 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/rounded_board"
                 android:scaleType="centerCrop"
                 android:src="@drawable/slss"
+                android:layout_gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +60,7 @@
             android:text="Nome da sua música"
             android:textColor="@color/white"
             android:textSize="18dp"
-            app:layout_constraintBottom_toTopOf="@+id/seekBar"
+            app:layout_constraintBottom_toTopOf="@+id/seekBar_song"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
@@ -108,12 +108,12 @@
                 app:tint="@color/white" />
 
             <ImageButton
-
+                android:id="@+id/play_pause_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/pause_ic"
+                android:src="@drawable/play_ic"
                 app:tint="@color/white" />
 
             <ImageButton
@@ -137,7 +137,7 @@
 
 
         <SeekBar
-            android:id="@+id/seekBar"
+            android:id="@+id/seekBar_song"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -155,22 +155,24 @@
             app:layout_constraintVertical_bias="0.219" />
 
         <TextView
+            android:id="@+id/full_song_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:text="-2:30"
+            android:text="-00:00"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/seekBar"
-            app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+            app:layout_constraintEnd_toEndOf="@+id/seekBar_song"
+            app:layout_constraintTop_toBottomOf="@+id/seekBar_song" />
 
         <TextView
+            android:id="@+id/current_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="0:30"
+            android:text="00:00"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/seekBar"
-            app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+            app:layout_constraintStart_toStartOf="@+id/seekBar_song"
+            app:layout_constraintTop_toBottomOf="@+id/seekBar_song" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -212,7 +214,7 @@
         android:id="@+id/sheet_playlist"
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        android:alpha="0.99"
+        android:alpha="0.8"
         android:background="@color/black"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -222,8 +224,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
@@ -240,35 +240,18 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
+                android:layout_marginStart="30dp"
                 android:textSize="17dp"
-                android:gravity="center"
-                android:text="Tocando zé zé "/>
-
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/skip_left_ic"
-                app:tint="@color/white" />
-
-            <ImageButton
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:src="@drawable/pause_ic_bottom_sheet"
-                app:tint="@color/white" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:src="@drawable/skio_right_ic"
-                app:tint="#B9B7B7" />
+                android:text="Tocando zé zé e luciano..."/>
 
         </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
+            tools:listitem="@layout/song_model"/>
 
 
     </FrameLayout>
