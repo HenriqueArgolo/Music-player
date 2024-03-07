@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<item android:id="@+id/playlist" android:title="@string/playlist"  android:icon="@drawable/playlist_ic"/>
+<item android:id="@+id/all_songs" android:title="@string/musicas" android:icon="@drawable/song_ic"/>
+<item android:id="@+id/search" android:title="@string/buscar" android:icon="@drawable/search_ic"/>
 </menu>

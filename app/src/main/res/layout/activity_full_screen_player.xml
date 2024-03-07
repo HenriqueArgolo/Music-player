@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    app:layout_behavior="@string/bottom_sheet_behavior"
     android:layout_height="match_parent"
     android:background="@drawable/main_lay_screen_gradient"
-    tools:context=".ui.activities.FullScreenPlayer">
+    tools:context=".ui.activities.ui.main.FullScreenPlayer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/main_lay_screen_gradient"
-        tools:context=".ui.activities.FullScreenPlayer">
+        tools:context=".ui.activities.ui.main.FullScreenPlayer">
 
 
         <ImageButton
@@ -142,11 +143,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:max="100"
-            android:progress="50"
             android:progressBackgroundTint="@color/white"
             android:progressTint="#40E647"
             android:thumbTint="#40E647"
+            android:progress="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -197,11 +197,10 @@
                 app:tint="@color/white" />
 
             <SeekBar
+                android:id="@+id/seekbar_audio"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:max="100"
-                android:progress="20"
                 android:progressBackgroundTint="@color/white"
                 android:progressTint="@color/white"
                 android:thumbTint="@color/white" />
@@ -255,5 +254,6 @@
 
 
     </FrameLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
