@@ -4,6 +4,6 @@ data class PlaylistModel(
     val id: Int,
     val name: String,
     val playingSong: String,
-    val songs: List<SongModel>
+    val songs: List<AudioFile>
 )
 

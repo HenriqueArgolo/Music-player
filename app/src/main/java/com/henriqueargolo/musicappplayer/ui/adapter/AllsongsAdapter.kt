@@ -4,16 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.transition.Hold
-import com.henriqueargolo.musicappplayer.data.model.SongModel
-import com.henriqueargolo.musicappplayer.databinding.PlaylistItemsBinding
+import com.henriqueargolo.musicappplayer.data.model.AudioFile
 import com.henriqueargolo.musicappplayer.databinding.SongModelBinding
 
-class AllsongsAdapter(val context: Context, val allSongs: List<SongModel>): RecyclerView.Adapter<AllsongsAdapter.ViewHolder>() {
+class AllsongsAdapter(val context: Context, var allSongs: List<AudioFile>): RecyclerView.Adapter<AllsongsAdapter.ViewHolder>() {
 
 
     class ViewHolder(val binding: SongModelBinding):RecyclerView.ViewHolder(binding.root) {
-        fun bind(song: SongModel){
+        fun bind(song: AudioFile){
             binding.SongTitle.text = song.title
             binding.Artist.text = song.artist
             binding.duration.text = song.duration.toString()

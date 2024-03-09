@@ -11,8 +11,6 @@ class PlaylistItemAdapter(val context : Context,  val playlists: List<PlaylistMo
     RecyclerView.Adapter<PlaylistItemAdapter.ViewHolder> (){
 
 
-
-
     class ViewHolder(val postItemsBinding: PlaylistItemsBinding):RecyclerView.ViewHolder(postItemsBinding.root){
         fun bind(playlist: PlaylistModel){
             postItemsBinding.imagePlaylist

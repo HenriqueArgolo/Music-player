@@ -4,18 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black"
+    android:layout_height="wrap_content"
+    android:background="#171616"
     tools:context=".ui.activities.ui.main.AllSongs">
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerVIew"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:clipToPadding="false"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/song_model" />
 </androidx.constraintlayout.widget.ConstraintLayout>
