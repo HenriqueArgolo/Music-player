@@ -22,16 +22,19 @@
        android:text="Criar Playlist"/>
 
    <androidx.recyclerview.widget.RecyclerView
-       android:layout_width="403dp"
-       android:layout_height="641dp"
+       android:layout_width="0dp"
+       android:layout_height="0dp"
        android:layout_marginTop="50dp"
        android:orientation="horizontal"
+       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
        app:layout_constraintBottom_toBottomOf="parent"
        app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.0"
        app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintTop_toBottomOf="@+id/editText"
+       app:layout_constraintVertical_bias="0.0"
+       tools:itemCount="22"
        tools:listitem="@layout/playlist_items" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

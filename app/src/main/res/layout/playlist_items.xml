@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="370dp"
         android:layout_height="153dp"
         android:background="@drawable/rounded_board"
@@ -20,23 +20,59 @@
         app:layout_constraintVertical_bias="0.027">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imagePlaylist"
             android:layout_width="152dp"
             android:layout_height="134dp"
             android:layout_gravity="start"
             android:scaleType="centerCrop"
-            android:src="@drawable/rounded_board" />
+            android:src="@drawable/rounded_board"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/playlist_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:layout_margin="10dp"
-            android:text="Playlist Name"
+            android:text="Musicas de rock"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/actionButtonPlaylist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintStart_toEndOf="@+id/imagePlaylist"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.017" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/playingNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="before you go... "
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/actionButtonPlaylist"
+            app:layout_constraintHorizontal_bias="0.86"
+            app:layout_constraintStart_toEndOf="@+id/imagePlaylist"
+            app:layout_constraintTop_toBottomOf="@+id/playlist_title"
+            app:layout_constraintVertical_bias="0.773" />
+
+        <ImageButton
+            android:id="@+id/actionButtonPlaylist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/pause_playlist"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
