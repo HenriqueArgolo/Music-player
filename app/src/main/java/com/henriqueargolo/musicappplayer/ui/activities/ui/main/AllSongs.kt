@@ -1,19 +1,25 @@
 package com.henriqueargolo.musicappplayer.ui.activities.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
+import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.henriqueargolo.musicappplayer.R
 import com.henriqueargolo.musicappplayer.data.model.AudioFile
 import com.henriqueargolo.musicappplayer.databinding.ActivityAllSongsBinding
-import com.henriqueargolo.musicappplayer.ui.adapter.AllsongsAdapter
+import com.henriqueargolo.musicappplayer.ui.adapter.SongAdapter
 import com.henriqueargolo.musicappplayer.ui.viewmodels.AudioMananger
 
 class AllSongs(): Fragment() {
     private lateinit var binding: ActivityAllSongsBinding
-    private lateinit var audioadapter: AllsongsAdapter
+    private lateinit var audioadapter: SongAdapter
+    private val player : FullScreenPlayer = FullScreenPlayer()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,23 +27,31 @@ class AllSongs(): Fragment() {
         savedInstanceState: Bundle?
 
     ): View {
-       binding = ActivityAllSongsBinding.inflate(inflater, container, false)
+        binding = ActivityAllSongsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-         val audioMananger = AudioMananger(requireContext())
-         val audioFile = audioMananger.getAllAudioFiles()
+        val audioMananger = AudioMananger(requireContext())
+        val audioFile = audioMananger.getAllAudioFiles()
 
-        audioadapter = AllsongsAdapter(requireContext(), audioFile)
+        audioadapter = SongAdapter(requireContext(), audioFile){ _ ->
+            navigation(player)
+
+        }
         binding.recyclerVIew.apply {
             adapter = audioadapter
             layoutManager = LinearLayoutManager(requireContext())
         }
 
+
     }
+    fun navigation(fragment: Fragment) {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.container_layout, fragment)
+        transaction.commit()
 
 
-
+    }
 }

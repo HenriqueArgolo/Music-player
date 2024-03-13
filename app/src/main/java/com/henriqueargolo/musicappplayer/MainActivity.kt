@@ -1,10 +1,13 @@
 package com.henriqueargolo.musicappplayer
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.henriqueargolo.musicappplayer.databinding.ActivityMainBinding
 import com.henriqueargolo.musicappplayer.ui.activities.ui.main.AllSongs
+import com.henriqueargolo.musicappplayer.ui.activities.ui.main.FullScreenPlayer
 import com.henriqueargolo.musicappplayer.ui.activities.ui.main.Playlist
 
 class MainActivity : AppCompatActivity() {
@@ -37,8 +40,6 @@ class MainActivity : AppCompatActivity() {
             else -> {false}
         }
     }
-
-
 
     }
 
