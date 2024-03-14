@@ -1,5 +1,6 @@
 package com.henriqueargolo.musicappplayer.ui.activities.ui.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +16,7 @@ import com.henriqueargolo.musicappplayer.databinding.ActivityAllSongsBinding
 import com.henriqueargolo.musicappplayer.ui.adapter.SongAdapter
 import com.henriqueargolo.musicappplayer.ui.viewmodels.AudioMananger
 
-class AllSongs(): Fragment() {
+class AllSongs(): Fragment(), SongAdapter.OnItemClick {
     private lateinit var binding: ActivityAllSongsBinding
     private lateinit var audioadapter: SongAdapter
     private val player : FullScreenPlayer = FullScreenPlayer()
@@ -36,10 +37,7 @@ class AllSongs(): Fragment() {
         val audioMananger = AudioMananger(requireContext())
         val audioFile = audioMananger.getAllAudioFiles()
 
-        audioadapter = SongAdapter(requireContext(), audioFile){ _ ->
-            navigation(player)
-
-        }
+        audioadapter = SongAdapter(requireContext(), audioFile, this)
         binding.recyclerVIew.apply {
             adapter = audioadapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -47,6 +45,15 @@ class AllSongs(): Fragment() {
 
 
     }
+
+    override fun onItemClick(song: AudioFile) {
+        navigation(player)
+        player.playAndPauseSong(song)
+        player.seekBarManipulation()
+
+    }
+
+
     fun navigation(fragment: Fragment) {
         val transaction = parentFragmentManager.beginTransaction()
         transaction.replace(R.id.container_layout, fragment)
@@ -54,4 +61,6 @@ class AllSongs(): Fragment() {
 
 
     }
+
+
 }
