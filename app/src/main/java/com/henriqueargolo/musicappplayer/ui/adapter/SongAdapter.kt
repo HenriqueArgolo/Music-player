@@ -15,7 +15,7 @@ class SongAdapter(
 ) : RecyclerView.Adapter<SongAdapter.ViewHolder>() {
 
     interface OnItemClick {
-        fun onItemClick(song: AudioFile)
+        fun onItemClick(position: Int)
     }
 
     class ViewHolder(val binding: SongModelBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -38,7 +38,8 @@ class SongAdapter(
         val song = allSongs[position]
         holder.bind(song)
         holder.itemView.setOnClickListener {
-            onItemClick.onItemClick(song)
+            onItemClick.onItemClick(position)
         }
     }
+
 }
