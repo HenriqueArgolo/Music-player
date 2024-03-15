@@ -11,17 +11,20 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.henriqueargolo.musicappplayer.R
 import com.henriqueargolo.musicappplayer.data.model.AudioFile
 import com.henriqueargolo.musicappplayer.databinding.ActivityFullScreenPlayerBinding
 import com.henriqueargolo.musicappplayer.ui.viewmodels.AudioMananger
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.measureTime
 
 class FullScreenPlayer : Fragment() {
     private lateinit var binding: ActivityFullScreenPlayerBinding
     private lateinit var audioManager: AudioManager
-    val mediaPlayer = MediaPlayer()
+    var mediaPlayer = MediaPlayer()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +46,10 @@ class FullScreenPlayer : Fragment() {
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
+        manipulateSongBySeekBar()
+        volume()
+
+
     }
 
     fun seekBarManipulation() {
@@ -51,7 +58,7 @@ class FullScreenPlayer : Fragment() {
         val runnable = object : Runnable {
             override fun run() {
                 calctime()
-                val currentPosition = mediaPlayer.currentPosition / 1000
+                var currentPosition = mediaPlayer.currentPosition / 1000
                 binding.seekBarSong.max = mediaPlayer.duration / 1000
                 binding.seekBarSong.progress = currentPosition
                 if (mediaPlayer.isPlaying) handle.postDelayed(this, 1000)
@@ -60,20 +67,48 @@ class FullScreenPlayer : Fragment() {
 
         }
         handle.postDelayed(runnable, 1000)
+
     }
 
-    fun nextSong(song: AudioFile) {
 
-        try {
-            binding.nextSong.setOnClickListener{
-                playAndPauseSong(song)
+    fun manipulateSongBySeekBar() {
+        binding.seekBarSong.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser){
+                    val songTIme = progress *1000
+                    mediaPlayer.seekTo(songTIme)
+                }
+
             }
 
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                return
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                return
+            }
+
+        })
+    }
 
 
+    fun volume() {
+        binding.seekbarAudio.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val valor = progress.toFloat() / 100
+                mediaPlayer.setVolume(valor, valor)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                return
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                return
+            }
+
+        })
     }
 
     fun playAndPauseSong(song: AudioFile) {
@@ -83,11 +118,15 @@ class FullScreenPlayer : Fragment() {
             mediaPlayer.setDataSource(song.path)
             mediaPlayer.prepareAsync()
             mediaPlayer.setOnPreparedListener { mp ->
-                binding.playlistTitle.text = song.title
 
+                binding.playlistTitle.text = song.title
+                binding.playlistSongName.text = song.title
+                val valor = binding.seekbarAudio.progress.toFloat() / 100
+                mediaPlayer.setVolume(valor, valor)
                 mediaPlayer.start()
                 seekBarManipulation()
                 binding.playPauseBtn.setImageResource(R.drawable.pause_ic)
+
 
                 binding.playPauseBtn.setOnClickListener {
                     if (mp.isPlaying) {
@@ -107,9 +146,6 @@ class FullScreenPlayer : Fragment() {
         }
     }
 
-
-
-
     fun onCompleteListner(song: AudioFile) {
         mediaPlayer.setOnCompletionListener(object : MediaPlayer.OnCompletionListener {
             override fun onCompletion(mp: MediaPlayer?) {
@@ -121,7 +157,6 @@ class FullScreenPlayer : Fragment() {
 
         })
     }
-
 
     fun calctime() {
         val seconds = mediaPlayer.currentPosition / 1000

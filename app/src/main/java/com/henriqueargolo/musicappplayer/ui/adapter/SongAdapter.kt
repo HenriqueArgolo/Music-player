@@ -16,6 +16,7 @@ class SongAdapter(
 
     interface OnItemClick {
         fun onItemClick(position: Int)
+
     }
 
     class ViewHolder(val binding: SongModelBinding) : RecyclerView.ViewHolder(binding.root) {

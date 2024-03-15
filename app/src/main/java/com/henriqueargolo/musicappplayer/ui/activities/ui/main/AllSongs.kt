@@ -57,18 +57,20 @@ class AllSongs() : Fragment(), SongAdapter.OnItemClick {
             player.mediaPlayer.stop()
             player.mediaPlayer.reset()
         }
+
         navigation(player)
         player.playAndPauseSong(song)
         player.seekBarManipulation()
         player.onCompleteListner(song)
 
-    bindingPlay.nextSong.setOnClickListener {
-        val nextSong = list[position + 1]
-        player.playAndPauseSong(nextSong)
-        player.seekBarManipulation()
 
-    }
-
+        if (bindingPlay.nextSong.isAttachedToWindow){
+            bindingPlay.nextSong.setOnClickListener {
+                val nextSong = list[position + 1]
+                player.playAndPauseSong(nextSong)
+                player.seekBarManipulation()
+            }
+        }
 
     }
 
