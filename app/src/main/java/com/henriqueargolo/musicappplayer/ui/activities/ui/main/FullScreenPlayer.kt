@@ -13,17 +13,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.henriqueargolo.musicappplayer.R
 import com.henriqueargolo.musicappplayer.data.model.AudioFile
 import com.henriqueargolo.musicappplayer.databinding.ActivityFullScreenPlayerBinding
+import com.henriqueargolo.musicappplayer.ui.adapter.SongAdapter
 import com.henriqueargolo.musicappplayer.ui.viewmodels.AudioMananger
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTime
 
-class FullScreenPlayer : Fragment() {
+class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
     private lateinit var binding: ActivityFullScreenPlayerBinding
     private lateinit var audioManager: AudioManager
+    private lateinit var adapter: SongAdapter
+    private lateinit var list: List<AudioFile>
+    private var currentPosition: Int = -1
     var mediaPlayer = MediaPlayer()
 
     override fun onCreateView(
@@ -40,14 +45,43 @@ class FullScreenPlayer : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding = ActivityFullScreenPlayerBinding.bind(view)
-
+        var currentSongPosition: Int = -1
         BottomSheetBehavior.from(binding.sheetPlaylist).apply {
-            peekHeight = 100
+            peekHeight = 140
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
+
+
+        configRv()
         manipulateSongBySeekBar()
         volume()
+
+
+    }
+
+
+    fun configRv() {
+        val audioMananger = AudioMananger(requireContext())
+        list = audioMananger.getAllAudioFiles()
+        val audioAdapter = SongAdapter(requireContext(), list, this)
+        binding.frameRecycler.apply {
+            adapter = audioAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    override fun onItemClick(position: Int) {
+        val song = list[position]
+        playAndPauseSong(song)
+        seekBarManipulation()
+
+            binding.nextSong.setOnClickListener {
+                val nextPosition = currentPosition + 1
+                val nextSong = list[nextPosition]
+                playAndPauseSong(nextSong)
+                seekBarManipulation()
+            }
 
 
     }
@@ -58,27 +92,24 @@ class FullScreenPlayer : Fragment() {
         val runnable = object : Runnable {
             override fun run() {
                 calctime()
-                var currentPosition = mediaPlayer.currentPosition / 1000
+                val currentPosition = mediaPlayer.currentPosition / 1000
                 binding.seekBarSong.max = mediaPlayer.duration / 1000
                 binding.seekBarSong.progress = currentPosition
                 if (mediaPlayer.isPlaying) handle.postDelayed(this, 1000)
-
             }
-
         }
         handle.postDelayed(runnable, 1000)
-
     }
 
 
     fun manipulateSongBySeekBar() {
         binding.seekBarSong.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser){
-                    val songTIme = progress *1000
+                if (fromUser) {
+                    val songTIme = progress * 1000
                     mediaPlayer.seekTo(songTIme)
+                    calctime()
                 }
-
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -88,10 +119,8 @@ class FullScreenPlayer : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 return
             }
-
         })
     }
-
 
     fun volume() {
         binding.seekbarAudio.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -107,13 +136,11 @@ class FullScreenPlayer : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 return
             }
-
         })
     }
 
     fun playAndPauseSong(song: AudioFile) {
         mediaPlayer.reset()
-
         try {
             mediaPlayer.setDataSource(song.path)
             mediaPlayer.prepareAsync()
@@ -140,10 +167,10 @@ class FullScreenPlayer : Fragment() {
                     }
                 }
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        currentPosition = list.indexOf(song)
     }
 
     fun onCompleteListner(song: AudioFile) {
@@ -154,7 +181,6 @@ class FullScreenPlayer : Fragment() {
                     playAndPauseSong(song)
                 }
             }
-
         })
     }
 

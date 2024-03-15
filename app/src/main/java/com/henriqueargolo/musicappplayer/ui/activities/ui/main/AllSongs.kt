@@ -75,6 +75,8 @@ class AllSongs() : Fragment(), SongAdapter.OnItemClick {
     }
 
 
+
+
     fun navigation(fragment: Fragment) {
         val transaction = parentFragmentManager.beginTransaction()
         transaction.replace(R.id.container_layout, fragment)
