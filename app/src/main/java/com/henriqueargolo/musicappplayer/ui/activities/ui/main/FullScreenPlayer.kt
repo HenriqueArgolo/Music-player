@@ -104,7 +104,6 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
             if (currentPosition < list.size) {
                 val nextSong = list[currentPosition++]
                 playAndPauseSong(nextSong)
-                seekBarManipulation()
             }
         }
     }
@@ -115,7 +114,6 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
             if (currentPosition > 0) {
                 val previousSong = list[currentPosition]
                 playAndPauseSong(previousSong)
-                seekBarManipulation()
             }
         }
     }
@@ -190,15 +188,19 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         }
     }
 
-    fun onCompleteListner(song: AudioFile) {
+    fun onCompletionListner() {
         mediaPlayer.setOnCompletionListener(object : MediaPlayer.OnCompletionListener {
             override fun onCompletion(mp: MediaPlayer?) {
-                binding.playPauseBtn.setImageResource(R.drawable.play_ic)
-                binding.playPauseBtn.setOnClickListener {
-                    playAndPauseSong(song)
+                if (currentPosition < list.size) {
+                    val nextSong = list[currentPosition++]
+                    playAndPauseSong(nextSong)
+                }else{
+                    currentPosition = list.indexOf(list[0])
                 }
-            }
-        })
+
+
+
+            }        })
     }
 
     fun calctime() {
