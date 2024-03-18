@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.henriqueargolo.musicappplayer.databinding.ActivityMainBinding
 import com.henriqueargolo.musicappplayer.ui.activities.ui.main.AllSongs
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.black300)
 
         val playlist = Playlist()
         navigatingThroughFragments(playlist)

@@ -24,6 +24,7 @@
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:alpha="0.3"
         android:layout_marginStart="16dp"
         android:layout_gravity="center"
         android:padding="10dp"
@@ -33,9 +34,9 @@
     <ImageButton
         android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:src="@drawable/search_ic"
         android:layout_gravity="center"
+        android:layout_marginStart="16dp"
         android:padding="10dp"
         android:background="@drawable/rounded_btn"/>
 
@@ -51,6 +52,7 @@
         android:layout_width="419dp"
         android:layout_height="699dp"
         android:clipToPadding="false"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

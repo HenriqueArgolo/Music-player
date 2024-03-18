@@ -28,7 +28,7 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
     private lateinit var audioManager: AudioManager
     private lateinit var adapter: SongAdapter
     private lateinit var list: List<AudioFile>
-    private var currentPosition: Int = -1
+    private var currentPosition = 0
     var mediaPlayer = MediaPlayer()
 
     override fun onCreateView(
@@ -51,8 +51,6 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-
-
         configRv()
         manipulateSongBySeekBar()
         volume()
@@ -60,6 +58,10 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
 
     }
 
+
+    override fun onStart() {
+        super.onStart()
+    }
 
     fun configRv() {
         val audioMananger = AudioMananger(requireContext())
@@ -72,18 +74,25 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
     }
 
     override fun onItemClick(position: Int) {
-        val song = list[position]
+        currentPosition = position
+        val song = list[currentPosition]
         playAndPauseSong(song)
         seekBarManipulation()
 
-            binding.nextSong.setOnClickListener {
-                val nextPosition = currentPosition + 1
-                val nextSong = list[nextPosition]
+        binding.nextSong.setOnClickListener {
+            if (currentPosition < list.size) {
+                val nextSong = list[currentPosition++]
                 playAndPauseSong(nextSong)
                 seekBarManipulation()
             }
-
-
+        }
+        binding.previousSong.setOnClickListener {
+            if (currentPosition > 1) {
+                val previousSong = list[currentPosition--]
+                playAndPauseSong(previousSong)
+                seekBarManipulation()
+            }
+        }
     }
 
     fun seekBarManipulation() {
@@ -170,7 +179,6 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        currentPosition = list.indexOf(song)
     }
 
     fun onCompleteListner(song: AudioFile) {
