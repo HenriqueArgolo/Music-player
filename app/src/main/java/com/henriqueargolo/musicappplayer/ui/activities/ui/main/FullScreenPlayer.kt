@@ -54,6 +54,8 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         configRv()
         manipulateSongBySeekBar()
         volume()
+        playNextSong()
+        playPreviousSong()
 
 
     }
@@ -79,20 +81,7 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         playAndPauseSong(song)
         seekBarManipulation()
 
-        binding.nextSong.setOnClickListener {
-            if (currentPosition < list.size) {
-                val nextSong = list[currentPosition++]
-                playAndPauseSong(nextSong)
-                seekBarManipulation()
-            }
-        }
-        binding.previousSong.setOnClickListener {
-            if (currentPosition > 1) {
-                val previousSong = list[currentPosition--]
-                playAndPauseSong(previousSong)
-                seekBarManipulation()
-            }
-        }
+
     }
 
     fun seekBarManipulation() {
@@ -110,6 +99,26 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         handle.postDelayed(runnable, 1000)
     }
 
+    fun playNextSong() {
+        binding.nextSong.setOnClickListener {
+            if (currentPosition < list.size) {
+                val nextSong = list[currentPosition++]
+                playAndPauseSong(nextSong)
+                seekBarManipulation()
+            }
+        }
+    }
+
+    fun playPreviousSong() {
+        binding.previousSong.setOnClickListener {
+            currentPosition--
+            if (currentPosition > 0) {
+                val previousSong = list[currentPosition]
+                playAndPauseSong(previousSong)
+                seekBarManipulation()
+            }
+        }
+    }
 
     fun manipulateSongBySeekBar() {
         binding.seekBarSong.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
