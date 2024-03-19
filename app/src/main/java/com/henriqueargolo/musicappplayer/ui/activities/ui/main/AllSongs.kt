@@ -61,7 +61,7 @@ class AllSongs() : Fragment(), SongAdapter.OnItemClick {
         navigation(player)
         player.playAndPauseSong(song)
         player.seekBarManipulation()
-        player.onCompletionListner()
+
 
 
         if (bindingPlay.nextSong.isAttachedToWindow){

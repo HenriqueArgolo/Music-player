@@ -138,11 +138,12 @@
                 app:tint="@color/white" />
 
             <ImageButton
+                android:id="@+id/repeat_song"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/repeat_ic"
+                android:src="@drawable/repeat_once"
                 app:tint="#CBC5C5" />
 
 

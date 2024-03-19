@@ -1,6 +1,7 @@
 package com.henriqueargolo.musicappplayer.ui.activities.ui.main
 
 import android.graphics.Color
+import android.graphics.Mesh
 import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
@@ -28,6 +29,7 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
     private lateinit var audioManager: AudioManager
     private lateinit var adapter: SongAdapter
     private lateinit var list: List<AudioFile>
+    private var clickCount = 0
     private var currentPosition = 0
     var mediaPlayer = MediaPlayer()
 
@@ -52,12 +54,12 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         }
 
         configRv()
-        manipulateSongBySeekBar()
         volume()
         playNextSong()
         playPreviousSong()
-
-
+        manipulateSongBySeekBar()
+        handleRepeatLogic()
+        repeatSong()
     }
 
 
@@ -80,8 +82,6 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         val song = list[currentPosition]
         playAndPauseSong(song)
         seekBarManipulation()
-
-
     }
 
     fun seekBarManipulation() {
@@ -104,6 +104,8 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
             if (currentPosition < list.size) {
                 val nextSong = list[currentPosition++]
                 playAndPauseSong(nextSong)
+            } else {
+                currentPosition = list.size
             }
         }
     }
@@ -111,12 +113,46 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
     fun playPreviousSong() {
         binding.previousSong.setOnClickListener {
             currentPosition--
-            if (currentPosition > 0) {
+            if (currentPosition >= 0) {
                 val previousSong = list[currentPosition]
                 playAndPauseSong(previousSong)
+            } else {
+                currentPosition = 0
             }
         }
     }
+
+    fun repeatSong() {
+        binding.repeatSong.setOnClickListener {
+            clickCount++
+            handleRepeatLogic()
+        }
+    }
+
+ fun handleRepeatLogic() {
+        when (clickCount) {
+            0-> {
+                binding.repeatSong.setImageResource(R.drawable.repeat_once)
+                binding.repeatSong.setColorFilter(Color.GRAY)
+                binding.playPauseBtn.setImageResource(R.drawable.play_ic)
+                mediaPlayer.setOnCompletionListener(null)
+            }
+
+            1 -> {
+                binding.repeatSong.setColorFilter(Color.WHITE)
+                mediaPlayer.isLooping = false
+                playlistLooping()
+            }
+            2 -> {
+                binding.repeatSong.setImageResource(R.drawable.repeat_ic)
+                mediaPlayer.isLooping = true
+            }
+            3 -> {
+                clickCount = 0
+            }
+        }
+    }
+
 
     fun manipulateSongBySeekBar() {
         binding.seekBarSong.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -137,6 +173,7 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
             }
         })
     }
+
 
     fun volume() {
         binding.seekbarAudio.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -188,19 +225,18 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         }
     }
 
-    fun onCompletionListner() {
+    fun playlistLooping() {
         mediaPlayer.setOnCompletionListener(object : MediaPlayer.OnCompletionListener {
             override fun onCompletion(mp: MediaPlayer?) {
                 if (currentPosition < list.size) {
                     val nextSong = list[currentPosition++]
                     playAndPauseSong(nextSong)
-                }else{
-                    currentPosition = list.indexOf(list[0])
+                } else {
+                    mediaPlayer.reset()
+                    binding.playPauseBtn.setImageResource(R.drawable.play_ic)
                 }
-
-
-
-            }        })
+            }
+        })
     }
 
     fun calctime() {
