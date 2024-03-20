@@ -7,35 +7,48 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-       <LinearLayout
-           android:id="@+id/container_layout"
-           android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:orientation="vertical"
-           app:layout_constraintBottom_toTopOf="@+id/bottomAppBar"
-           app:layout_constraintEnd_toEndOf="parent"
-           android:background="@drawable/main_lay_screen_gradient"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/container_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/main_lay_screen_gradient"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomAppBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/miniSongContainer"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/container_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" >
+
+        <include layout="@layout/mine_song"/>
+
+    </LinearLayout>
 
 
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="BottomAppBar">
 
-       <com.google.android.material.bottomappbar.BottomAppBar
-           android:id="@+id/bottomAppBar"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           app:layout_constraintBottom_toBottomOf="parent"
-           app:layout_constraintEnd_toEndOf="parent"
-           app:layout_constraintStart_toStartOf="parent"
-           tools:ignore="BottomAppBar">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:menu="@menu/song_menu" />
 
-              <com.google.android.material.bottomnavigation.BottomNavigationView
-                  android:id="@+id/bottom_navigation"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  app:menu="@menu/song_menu" />
 
-       </com.google.android.material.bottomappbar.BottomAppBar>
+    </com.google.android.material.bottomappbar.BottomAppBar>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

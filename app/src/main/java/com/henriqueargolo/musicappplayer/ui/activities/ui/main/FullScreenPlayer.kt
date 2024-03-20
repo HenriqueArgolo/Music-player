@@ -1,11 +1,8 @@
 package com.henriqueargolo.musicappplayer.ui.activities.ui.main
 
 import android.graphics.Color
-import android.graphics.Mesh
 import android.media.AudioManager
-import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
-import android.media.MediaPlayer.OnCompletionListener
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,16 +18,18 @@ import com.henriqueargolo.musicappplayer.data.model.AudioFile
 import com.henriqueargolo.musicappplayer.databinding.ActivityFullScreenPlayerBinding
 import com.henriqueargolo.musicappplayer.ui.adapter.SongAdapter
 import com.henriqueargolo.musicappplayer.ui.viewmodels.AudioMananger
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.measureTime
+import kotlin.random.Random
+
 
 class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
     private lateinit var binding: ActivityFullScreenPlayerBinding
     private lateinit var audioManager: AudioManager
     private lateinit var adapter: SongAdapter
     private lateinit var list: List<AudioFile>
+    private val miniSong: MineSong = MineSong()
     private var clickCount = 0
     private var currentPosition = 0
+    private var random = 0
     var mediaPlayer = MediaPlayer()
 
     override fun onCreateView(
@@ -45,26 +44,53 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = ActivityFullScreenPlayerBinding.bind(view)
         var currentSongPosition: Int = -1
         BottomSheetBehavior.from(binding.sheetPlaylist).apply {
             peekHeight = 140
             this.state = BottomSheetBehavior.STATE_COLLAPSED
+
+
         }
 
         configRv()
+        resumeSongPlayer()
         volume()
         playNextSong()
         playPreviousSong()
         manipulateSongBySeekBar()
-        handleRepeatLogic()
         repeatSong()
+        randomSong()
+        miniSong()
     }
 
 
     override fun onStart() {
         super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    fun resumeSongPlayer() {
+        val allSongs = AllSongs()
+        binding.backButton.setOnClickListener {
+            navigation(allSongs)
+        }
+    }
+
+    fun miniSong() {
+        binding.backButton.setOnClickListener {
+            val allsongs = AllSongs()
+            navigation(allsongs)
+            val song = list[currentPosition]
+            val fragment = MineSong.newInstance(song)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.miniSongContainer, fragment)
+                .commit()
+
+        }
+
     }
 
     fun configRv() {
@@ -129,26 +155,30 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         }
     }
 
- fun handleRepeatLogic() {
+    fun handleRepeatLogic() {
         when (clickCount) {
-            0-> {
-                binding.repeatSong.setImageResource(R.drawable.repeat_once)
-                binding.repeatSong.setColorFilter(Color.GRAY)
-                binding.playPauseBtn.setImageResource(R.drawable.play_ic)
-                mediaPlayer.setOnCompletionListener(null)
-            }
 
             1 -> {
                 binding.repeatSong.setColorFilter(Color.WHITE)
                 mediaPlayer.isLooping = false
                 playlistLooping()
             }
+
             2 -> {
                 binding.repeatSong.setImageResource(R.drawable.repeat_ic)
                 mediaPlayer.isLooping = true
             }
+
             3 -> {
+
                 clickCount = 0
+                mediaPlayer.isLooping = false
+                mediaPlayer.setOnCompletionListener(null)
+                binding.repeatSong.setImageResource(R.drawable.repeat_once)
+                binding.repeatSong.setColorFilter(Color.GRAY)
+                binding.playPauseBtn.setImageResource(R.drawable.play_ic)
+
+
             }
         }
     }
@@ -225,6 +255,13 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         }
     }
 
+    fun playRandomSong() {
+        val nextRandomPosition = Random.nextInt(list.size)
+        currentPosition = nextRandomPosition
+        val randomSong = list[currentPosition]
+        playAndPauseSong(randomSong)
+    }
+
     fun playlistLooping() {
         mediaPlayer.setOnCompletionListener(object : MediaPlayer.OnCompletionListener {
             override fun onCompletion(mp: MediaPlayer?) {
@@ -232,11 +269,28 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
                     val nextSong = list[currentPosition++]
                     playAndPauseSong(nextSong)
                 } else {
-                    mediaPlayer.reset()
-                    binding.playPauseBtn.setImageResource(R.drawable.play_ic)
+                    currentPosition = 0
+                    val nextSong = list[currentPosition]
+                    playAndPauseSong(nextSong)
                 }
             }
         })
+    }
+
+    fun randomSong() {
+        binding.randomSong.setOnClickListener {
+            if (random == 0) {
+                random = 1
+                binding.randomSong.setColorFilter(Color.WHITE)
+                mediaPlayer.setOnCompletionListener {
+                    playRandomSong()
+                }
+            } else {
+                random = 0
+                binding.randomSong.setColorFilter(Color.GRAY)
+                mediaPlayer.setOnCompletionListener(null)
+            }
+        }
     }
 
     fun calctime() {
@@ -256,5 +310,11 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         binding.fullSongTime.text = fullText
     }
 
+    fun navigation(fragment: Fragment) {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.container_layout, fragment)
+        transaction.commit()
+
+    }
 }
 
