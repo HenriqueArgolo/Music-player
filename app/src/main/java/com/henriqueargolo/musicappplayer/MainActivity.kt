@@ -33,12 +33,17 @@ class MainActivity : AppCompatActivity() {
         val playlist = Playlist()
         navigatingThroughFragments(playlist)
 
+        val player = FullScreenPlayer()
+
+
 
     binding.bottomNavigation.setOnItemSelectedListener{item ->
         when(item.itemId) {
             R.id.playlist -> {
+                player.mediaPlayer.stop()
                  navigatingThroughFragments(playlist)
                 true
+
             }
             R.id.all_songs -> {
                 val allSongs = AllSongs()
