@@ -13,11 +13,13 @@ import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.henriqueargolo.musicappplayer.MainActivity
 import com.henriqueargolo.musicappplayer.R
 import com.henriqueargolo.musicappplayer.data.model.AudioFile
 import com.henriqueargolo.musicappplayer.databinding.ActivityFullScreenPlayerBinding
 import com.henriqueargolo.musicappplayer.ui.adapter.SongAdapter
 import com.henriqueargolo.musicappplayer.ui.viewmodels.AudioMananger
+import com.henriqueargolo.musicappplayer.ui.viewmodels.Player
 import kotlin.random.Random
 
 
@@ -30,7 +32,7 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
     private var clickCount = 0
     private var currentPosition = 0
     private var random = 0
-    var mediaPlayer = MediaPlayer()
+    var mediaPlayer = Player.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,8 +50,6 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
         BottomSheetBehavior.from(binding.sheetPlaylist).apply {
             peekHeight = 140
             this.state = BottomSheetBehavior.STATE_COLLAPSED
-
-
         }
 
         configRv()

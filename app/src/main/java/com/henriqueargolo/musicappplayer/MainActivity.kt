@@ -3,6 +3,7 @@ package com.henriqueargolo.musicappplayer
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -18,6 +19,7 @@ import com.henriqueargolo.musicappplayer.ui.activities.ui.main.Playlist
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     private val player: FullScreenPlayer = FullScreenPlayer()
+    private lateinit var mediaPlayer: MediaPlayer
     private lateinit var bindingMini: MineSongBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         bindingMini = MineSongBinding.inflate(layoutInflater)
+
+        mediaPlayer = MediaPlayer()
+
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.black300)
 
@@ -59,6 +64,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     }
+    fun getMediaPlayerInstance(): MediaPlayer{
+        return mediaPlayer
+    }
+
 
     fun navigatingThroughFragments(fragment : Fragment){
         val transaction = supportFragmentManager.beginTransaction()

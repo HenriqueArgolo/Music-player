@@ -7,25 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import com.henriqueargolo.musicappplayer.R
 import androidx.fragment.app.Fragment
+import com.henriqueargolo.musicappplayer.MainActivity
 import com.henriqueargolo.musicappplayer.data.model.AudioFile
 import com.henriqueargolo.musicappplayer.databinding.MineSongBinding
+import com.henriqueargolo.musicappplayer.ui.viewmodels.Player
 
 class MineSong : Fragment() {
     private lateinit var binding: MineSongBinding
-    private lateinit var mediaPlayer: MediaPlayer
-    private lateinit var  aduifile: AudioFile
+    var mediaPlayer = Player.getInstance()
+    private lateinit var aduifile: AudioFile
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = MineSongBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
-    companion object{
-        fun newInstance(audioFile: AudioFile): MineSong{
+    companion object {
+        fun newInstance(audioFile: AudioFile): MineSong {
             val fragment = MineSong()
             val args = Bundle().apply {
                 putSerializable("audioFile", audioFile)
@@ -34,45 +34,46 @@ class MineSong : Fragment() {
             return fragment
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mediaPlayer = MediaPlayer()
         miniSongInfo()
+        btnPlayerPause()
         backToFullScreen()
     }
 
-    fun miniSongInfo(){
+    fun miniSongInfo() {
         try {
             val audioFile = arguments?.getSerializable("audioFile") as AudioFile
-            if(audioFile != null){
+            if (audioFile != null) {
                 binding.mineSong.visibility = View.VISIBLE
                 binding.mineTitle.text = audioFile.title
-        }
-        }catch (e:Exception){
+            }
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
     }
 
-    fun backToFullScreen(){
-        val screen = FullScreenPlayer()
-        binding.mineSong.setOnClickListener {
-            binding.mineSong.visibility = View.GONE
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.container_layout, screen)
-                .commit()
+    fun btnPlayerPause() {
+                binding.miniBtn.setOnClickListener {
+                    if (mediaPlayer.isPlaying) {
+                        binding.miniBtn.setImageResource(R.drawable.play_ic)
+                        mediaPlayer.pause()
+                    } else {
+                        binding.miniBtn.setImageResource(R.drawable.pause_ic)
+                        mediaPlayer.start()
+                    }
+                }
+            }
+
+
+        fun backToFullScreen() {
+            val screen = FullScreenPlayer()
+            binding.mineSong.setOnClickListener {
+                binding.mineSong.visibility = View.GONE
+                parentFragmentManager.beginTransaction().replace(R.id.container_layout, screen)
+                    .commit()
+            }
         }
     }
-
-
-
-    fun mineSongTime(mediaPlayer: MediaPlayer) {
-        val seconds = mediaPlayer.currentPosition / 1000
-        val minutes = seconds / 60
-        val remainingSeconds = seconds % 60
-        val progressText = String.format("%02d:%02d", minutes, remainingSeconds)
-        binding.miniTime.text = progressText
-    }
-
-}
