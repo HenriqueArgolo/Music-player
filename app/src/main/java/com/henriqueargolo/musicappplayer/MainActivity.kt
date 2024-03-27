@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
     binding.bottomNavigation.setOnItemSelectedListener{item ->
         when(item.itemId) {
             R.id.playlist -> {
-                player.mediaPlayer.stop()
                  navigatingThroughFragments(playlist)
                 true
 

@@ -32,7 +32,7 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
     private var clickCount = 0
     private var currentPosition = 0
     private var random = 0
-    var mediaPlayer = Player.getInstance()
+    var mediaPlayer: MediaPlayer = Player.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -236,7 +236,6 @@ class FullScreenPlayer : Fragment(), SongAdapter.OnItemClick {
                 mediaPlayer.start()
                 seekBarManipulation()
                 binding.playPauseBtn.setImageResource(R.drawable.pause_ic)
-
 
                 binding.playPauseBtn.setOnClickListener {
                     if (mp.isPlaying) {

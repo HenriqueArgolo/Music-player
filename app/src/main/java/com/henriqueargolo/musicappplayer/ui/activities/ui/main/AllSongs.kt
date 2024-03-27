@@ -3,6 +3,8 @@ package com.henriqueargolo.musicappplayer.ui.activities.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +18,14 @@ import com.henriqueargolo.musicappplayer.databinding.ActivityAllSongsBinding
 import com.henriqueargolo.musicappplayer.databinding.ActivityFullScreenPlayerBinding
 import com.henriqueargolo.musicappplayer.ui.adapter.SongAdapter
 import com.henriqueargolo.musicappplayer.ui.viewmodels.AudioMananger
+import com.henriqueargolo.musicappplayer.ui.viewmodels.Player
 import java.util.zip.Inflater
 
 class AllSongs() : Fragment(), SongAdapter.OnItemClick {
     private lateinit var binding: ActivityAllSongsBinding
     private lateinit var bindingPlay: ActivityFullScreenPlayerBinding
     private lateinit var audioadapter: SongAdapter
-    private val player: FullScreenPlayer = FullScreenPlayer()
+    private var player: FullScreenPlayer = FullScreenPlayer()
     private lateinit var list: List<AudioFile>
 
     override fun onCreateView(
@@ -50,6 +53,7 @@ class AllSongs() : Fragment(), SongAdapter.OnItemClick {
     }
 
     override fun onItemClick(position: Int) {
+        player = FullScreenPlayer()
         bindingPlay = ActivityFullScreenPlayerBinding.inflate(layoutInflater)
         player.mediaPlayer.stop()
         val song = list[position]
@@ -74,9 +78,12 @@ class AllSongs() : Fragment(), SongAdapter.OnItemClick {
 
     }
 
+
+
+
     fun navigation(fragment: Fragment) {
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.container_layout, fragment)
+        transaction.replace(R.id.container_layout, fragment )
         transaction.commit()
 
     }
